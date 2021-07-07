@@ -39,6 +39,7 @@ app.post("/signup", function(req, res){
     var admin = (req.body.isAdmin=='on')?1:0;
     isUseradmin = (req.body.isAdmin=='on')?1:0;
     var password = req.body.password;
+    const dob=req.body.date;
     const saltRounds=bcrypt.genSalt(20);
     const sql="select * from user_data where email=?";
     con.query(sql,[email],(err,rows)=>{
@@ -50,7 +51,7 @@ app.post("/signup", function(req, res){
         {
             if(rows.length==0)
         {
-            con.query("insert into user_data values(?,?,?,?,?)",[user_name,email,mobile,admin,password],(err,rows)=>{
+            con.query("insert into user_data values(?,?,?,?,?,?)",[user_name,email,mobile,admin,password,dob],(err,rows)=>{
                 if(err)
                 {
                     console.log(err);
