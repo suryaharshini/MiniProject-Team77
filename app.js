@@ -4,6 +4,7 @@ const mysql = require("mysql2");
 const bcrypt=require("bcrypt");
 const app = express();
 const passport=require("passport");
+const port=3001;
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -122,6 +123,8 @@ app.get("/logout",(req,res)=>{
     req.logOut();
     res.redirect("/login");
 });
+
+
   app.listen(port, function() {
     console.log("Server started on port 3000");
   });
