@@ -10,11 +10,32 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+const con= mysql.createConnection(
+    {
+        host: 'localhost',
+        user:'root',
+        password:'',
+        database:'user'
+    }
+)
+con.connect(function(err){
+    if(err)
+    {
+        console.log(err);
+    }
+    else
+    {
+        console.log('Connected to MySQL!');
+    }
+})
+
 app.set('views','./views')
 
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 
 app.get("/signup", function(req, res){
@@ -37,7 +58,35 @@ app.post("/signup", function(req, res){
     var admin = (req.body.isAdmin=='on')?1:0;
     var isUseradmin = (req.body.isAdmin=='on')?1:0;
     var password = req.body.password;
+    const dob=req.body.date;
     const saltRounds=bcrypt.genSalt(20);
+    const sql="select * from user_data where email=?";
+    con.query(sql,[email],(err,rows)=>{
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            if(rows.length==0)
+        {
+            con.query("insert into user_data values(?,?,?,?,?,?)",[user_name,email,mobile,admin,password,dob],(err,rows)=>{
+                if(err)
+                {
+                    console.log(err);
+                }
+                else
+                {
+                    res.send("Data added successfully!");
+                }
+            });
+        }
+        else
+        {
+            res.send("user already exist");
+        }
+        }
+    })
 });
 
 
@@ -51,9 +100,9 @@ app.post("/login", function(req, res){
     const password = req.body.password;
     isUseradmin = (req.body.isAdmin=='on')?1:0;
     var flag;
-    const chkquery = "SELECT * FROM user WHERE email=?";
+    const chkquery = "SELECT * FROM user_data WHERE email=?";
     
-    mysqlConnection.query(chkquery,[email], (err, chkres, fields) => {
+    con.query(chkquery,[email], (err, chkres, fields) => {
         if (!err){
             if(chkres.length==1){
                 bcrypt.compare(password,chkres[0].password, function(err, result) {
@@ -90,8 +139,6 @@ app.post("/login", function(req, res){
             else
             console.log(err);
     });
-
-
 
 });
 
