@@ -7,11 +7,20 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.set('views','./views')
+const port=3001
 
 app.get("/signup", function(req, res){
     res.render("signup");
 })
+app.get("/header", function(req, res){
+    res.render("header");
+})
+app.get("/login", function(req, res){
+    res.render("login");
+})
+
+
 
 app.post("/signup", function(req, res){
     const name = req.body.name;
@@ -76,3 +85,6 @@ app.post("/login", function(req, res){
     });
 
 })
+
+
+app.listen(port,()=>console.info(`Listening on ${port}`))
