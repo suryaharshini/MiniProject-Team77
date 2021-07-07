@@ -10,12 +10,24 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.set('views','./views')
+
+
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 app.get("/signup", function(req, res){
     res.render("signup");
 })
+app.get("/header", function(req, res){
+    res.render("header");
+})
+app.get("/login", function(req, res){
+    res.render("login");
+})
+
+
 
 app.post("/signup", function(req, res){
     const name = req.body.name;
@@ -79,6 +91,8 @@ app.post("/login", function(req, res){
             console.log(err);
     });
 
+
+
 });
 
 //google oauth
@@ -109,8 +123,7 @@ passport.use(new GoogleStrategy({
        //});
   }
 ));
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+app.get('/auth/google',passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
 
 app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
@@ -124,6 +137,6 @@ app.get("/logout",(req,res)=>{
     res.redirect("/login");
 });
 
-
-  app.listen(port,()=>console.info(`Listening on ${port}`))
+app.listen(port,()=>console.info(`Listening on ${port}`))
   
+
