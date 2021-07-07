@@ -40,16 +40,33 @@ app.post("/signup", function(req, res){
     isUseradmin = (req.body.isAdmin=='on')?1:0;
     var password = req.body.password;
     const saltRounds=bcrypt.genSalt(20);
-    con.query("insert into user_data values(?,?,?,?,?)",[user_name,email,mobile,admin,password],(err,rows)=>{
+    const sql="select * from user_data where email=?";
+    con.query(sql,[email],(err,rows)=>{
         if(err)
         {
             console.log(err);
         }
         else
         {
-            res.send("Data added successfully!");
+            if(rows.length==0)
+        {
+            con.query("insert into user_data values(?,?,?,?,?)",[user_name,email,mobile,admin,password],(err,rows)=>{
+                if(err)
+                {
+                    console.log(err);
+                }
+                else
+                {
+                    res.send("Data added successfully!");
+                }
+            });
         }
-    });
+        else
+        {
+            res.send("user already exist");
+        }
+        }
+    })
 });
 
 
@@ -63,7 +80,7 @@ app.post("/login", function(req, res){
     const password = req.body.password;
     isUseradmin = (req.body.isAdmin=='on')?1:0;
     var flag;
-    const chkquery = "SELECT * FROM user WHERE email=?";
+    const chkquery = "SELECT * FROM user_data WHERE email=?";
     
     con.query(chkquery,[email], (err, chkres, fields) => {
         if (!err){
@@ -104,7 +121,6 @@ app.post("/login", function(req, res){
     });
 
 })
-
 app.listen(3000,()=>{
     console.log(`Listening to the port: 3000`);
 })
