@@ -8,6 +8,24 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const con= mysql.createConnection(
+    {
+        host: 'localhost',
+        user:'root',
+        password:'',
+        database:'user'
+    }
+)
+con.connect(function(err){
+    if(err)
+    {
+        console.log(err);
+    }
+    else
+    {
+        console.log('Connected to MySQL!');
+    }
+})
 
 app.get("/signup", function(req, res){
     res.render("signup");
@@ -22,6 +40,16 @@ app.post("/signup", function(req, res){
     isUseradmin = (req.body.isAdmin=='on')?1:0;
     var password = req.body.password;
     const saltRounds=bcrypt.genSalt(20);
+    con.query("insert into user_data values(?,?,?,?,?)",[user_name,email,mobile,admin,password],(err,rows)=>{
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            res.send("Data added successfully!");
+        }
+    });
 });
 
 
@@ -37,7 +65,7 @@ app.post("/login", function(req, res){
     var flag;
     const chkquery = "SELECT * FROM user WHERE email=?";
     
-    mysqlConnection.query(chkquery,[email], (err, chkres, fields) => {
+    con.query(chkquery,[email], (err, chkres, fields) => {
         if (!err){
             if(chkres.length==1){
                 bcrypt.compare(password,chkres[0].password, function(err, result) {
@@ -75,4 +103,8 @@ app.post("/login", function(req, res){
             console.log(err);
     });
 
+})
+
+app.listen(3000,()=>{
+    console.log(`Listening to the port: 3000`);
 })
