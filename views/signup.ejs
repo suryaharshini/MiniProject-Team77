@@ -1,0 +1,37 @@
+<%- include('header') %>
+<p class="display-4 text-center text-info m-5">Signup here</p>
+<form  class="w-75 text-dark mx-auto mt-5">
+    <div class="form-floating mb-3">
+        <input type="username" class="form-control" id="username" placeholder="name@example.com" name="username"
+            ngModel>
+        <label for="username">Name</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="password" placeholder="Password" name="password" ngModel>
+        <label for="password">Phone Number</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" ngModel>
+        <label for="email">Email </label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="date" class="form-control" id="dob" placeholder="Email" name="dob" ngModel>
+        <label for="dob">Date of birth</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="username" class="form-control" id="dob" placeholder="Email" name="username" ngModel>
+        <label for="dob">Username</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="dob" placeholder="Email" name="password" ngModel>
+        <label for="dob">Password</label>
+    </div>
+
+    <div>
+        ALready a registered user then <a href="/login"><b>Sign in</b></a>
+    </div>
+
+
+<button class="btn btn-success" type="submit">Signup</button>
+</form>
+
